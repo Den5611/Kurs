@@ -87,17 +87,17 @@
         function saveData() {
             const transport = parseFloat(document.getElementById('transport').value) || 0;
             const food = parseFloat(document.getElementById('food').value) || 0;
-            const entertaiments = parseFloat(document.getElementById('entertaiment').value) || 0;
+            const entertaiments = parseFloat(document.getElementById('entertaiments').value) || 0; // Исправлено
             const health = parseFloat(document.getElementById('health').value) || 0;
             const other = parseFloat(document.getElementById('other').value) || 0;
-        
-
+    
             const expenses = { transport, food, entertaiments, health, other };
             localStorage.setItem('expenses', JSON.stringify(expenses));
-
+    
             displaySavedData();
         }
 
+    
         // Функция для отображения сохраненных данных
         function displaySavedData() {
             const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || { transport: 0, food: 0, entertaiments: 0, health: 0, other: 0 };
