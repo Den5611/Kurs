@@ -121,8 +121,12 @@
             // Проверка, есть ли уже запись на эту дату
             const existingIndex = allExpenses.findIndex(expense => expense.date === date);
             if (existingIndex !== -1) {
-                // Обновляем существующую запись
-                allExpenses[existingIndex] = newExpense;
+                // Обновляем существующую запись, складывая значения
+                allExpenses[existingIndex].transport += transport;
+                allExpenses[existingIndex].food += food;
+                allExpenses[existingIndex].entertaiments += entertaiments;
+                allExpenses[existingIndex].health += health;
+                allExpenses[existingIndex].other += other;
             } else {
                 // Добавляем новую запись
                 allExpenses.push(newExpense);
