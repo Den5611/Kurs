@@ -191,6 +191,38 @@
                 : `Долг за ${selectedMonth}: <strong>${Math.abs(monthlyBalance).toFixed(2)}</strong>`;
         }
 
+        function saveData() {
+    const transport = parseFloat(document.getElementById('transport').value) || 0;
+    const food = parseFloat(document.getElementById('food').value) || 0;
+    const entertaiments = parseFloat(document.getElementById('entertaiments').value) || 0;
+    const health = parseFloat(document.getElementById('health').value) || 0;
+    const other = parseFloat(document.getElementById('other').value) || 0;
+    const date = document.getElementById('date').value || "Дата не указана";
+    const month = document.getElementById('month').value;
+
+    const newExpense = { date, month, transport, food, entertaiments, health, other };
+
+    let allExpenses = JSON.parse(localStorage.getItem('allExpenses')) || [];
+
+    // Проверка, есть ли уже запись на эту дату
+    const existingIndex = allExpenses.findIndex(expense => expense.date === date);
+    if (existingIndex !== -1) {
+        // Обновляем существующую запись, складывая значения
+        allExpenses[existingIndex].transport += transport;
+        allExpenses[existingIndex].food += food;
+        allExpenses[existingIndex].entertaiments += entertaiments;
+        allExpenses[existingIndex].health += health;
+        allExpenses[existingIndex].other += other;
+    } else {
+        // Добавляем новую запись
+        allExpenses.push(newExpense);
+    }
+
+    localStorage.setItem('allExpenses', JSON.stringify(allExpenses));
+    displaySavedData();
+}
+
+
         // Отображение сохраненных данных при загрузке страницы
         window.onload = function() {
             displaySavedData();
