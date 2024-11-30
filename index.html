@@ -97,6 +97,8 @@
 
         <button onclick="calculate()">Рассчитать остаток</button>
 
+        <button onclick="calculateMonthly()">Рассчитать остаток за месяц</button>
+
         <div id="result" class="result"></div>
         <div id="savedData" class="result"></div>
     </div>
@@ -113,39 +115,66 @@
             const month = document.getElementById('month').value || "Месяц не указан";
 
             const expenses = { transport, food, entertaiments, health, other, date, month };
-            localStorage.setItem('expenses', JSON.stringify(expenses));
+            const allExpenses = JSON.parse(localStorage.getItem('allExpenses')) || [];
+            allExpenses.push(expenses);
+            localStorage.setItem('allExpenses', JSON.stringify(allExpenses));
 
             displaySavedData();
         }
 
         // Функция для отображения сохраненных данных
         function displaySavedData() {
-            const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || { transport: 0, food: 0, entertaiments: 0, health: 0, other: 0, date: "Дата не указана", month: "Месяц не указан" };
+            const allExpenses = JSON.parse(localStorage.getItem('allExpenses')) || [];
             const savedDataElement = document.getElementById('savedData');
-            savedDataElement.innerHTML = `
-                <strong>Сохраненные расходы:</strong><br>
-                Дата: ${savedExpenses.date} <br>
-                Месяц: ${savedExpenses.month} <br>
-                Транспорт: ${savedExpenses.transport} <br>
-                Еда: ${savedExpenses.food} <br>
-                Развлечения: ${savedExpenses.entertaiments} <br>
-                Здоровье: ${savedExpenses.health} <br>
-                Прочие расходы: ${savedExpenses.other}
-            `;
+            savedDataElement.innerHTML = "<strong>Сохраненные расходы:</strong><br>";
+            allExpenses.forEach((expense, index) => {
+                savedDataElement.innerHTML += `
+                    <strong>Запись ${index + 1}:</strong><br>
+                    Дата: ${expense.date} <br>
+                    Месяц: ${expense.month} <br>
+                    Транспорт: ${expense.transport} <br>
+                    Еда: ${expense.food} <br>
+                    Развлечения: ${expense.entertaiments} <br>
+                    Здоровье: ${expense.health} <br>
+                    Прочие расходы: ${expense.other} <br><br>
+                `;
+            });
         }
 
         // Функция для расчета остатка
         function calculate() {
             const income = parseFloat(document.getElementById('income').value) || 0;
-            const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || { transport: 0, food: 0, entertaiments: 0, health: 0, other: 0 };
+            const allExpenses = JSON.parse(localStorage.getItem('allExpenses')) || [];
 
-            const totalExpenses = savedExpenses.transport + savedExpenses.food + savedExpenses.entertaiments + savedExpenses.health + savedExpenses.other;
+            const totalExpenses = allExpenses.reduce((total, expense) => {
+                return total + expense.transport + expense.food + expense.entertaiments + expense.health + expense.other;
+            }, 0);
+
             const balance = income - totalExpenses;
 
             const resultElement = document.getElementById('result');
             resultElement.innerHTML = balance >= 0
-                ? `Ваш остаток: <strong>${balance.toFixed(2)}</strong>`
-                : `Ваш долг: <strong>${Math.abs(balance).toFixed(2)}</strong>`;
+                ? `Ваш общий остаток: <strong>${balance.toFixed(2)}</strong>`
+                : `Ваш общий долг: <strong>${Math.abs(balance).toFixed(2)}</strong>`;
+        }
+
+        // Функция для расчета остатка за месяц
+        function calculateMonthly() {
+            const selectedMonth = document.getElementById('month').value;
+            const allExpenses = JSON.parse(localStorage.getItem('allExpenses')) || [];
+
+            const monthlyExpenses = allExpenses.filter(expense => expense.month === selectedMonth);
+            const totalMonthlyExpenses = monthlyExpenses.reduce((total, expense) => {
+                return total + expense.transport + expense.food + expense.entertaiments + expense.health + expense.other;
+            }, 0);
+
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const monthlyBalance = income - totalMonthlyExpenses;
+
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = monthlyBalance >= 0
+                ? `Остаток за ${selectedMonth}: <strong>${monthlyBalance.toFixed(2)}</strong>`
+                : `Долг за ${selectedMonth}: <strong>${Math.abs(monthlyBalance).toFixed(2)}</strong>`;
         }
 
         // Отображение сохраненных данных при загрузке страницы
@@ -155,3 +184,4 @@
     </script>
 </body>
 </html>
+
