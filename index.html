@@ -58,6 +58,16 @@
             <label for="food">Еда:</label>
             <input type="number" id="food" placeholder="Сумма на еду" />
         </div>
+        
+        <div class="category-input">
+            <label for="health">Здоровье:</label>
+            <input type="number" id="health" placeholder="Сумма на здоровье" />
+        </div>
+
+        <div class="category-input">
+            <label for="entertaiments">Развлечения:</label>
+            <input type="number" id="entertaiments" placeholder="Сумма на развлечения" />
+        </div>
 
         <div class="category-input">
             <label for="other">Прочие расходы:</label>
@@ -77,9 +87,12 @@
         function saveData() {
             const transport = parseFloat(document.getElementById('transport').value) || 0;
             const food = parseFloat(document.getElementById('food').value) || 0;
+            const entertaiments = parseFloat(document.getElementById('entertaiment').value) || 0;
+            const health = parseFloat(document.getElementById('health').value) || 0;
             const other = parseFloat(document.getElementById('other').value) || 0;
+        
 
-            const expenses = { transport, food, other };
+            const expenses = { transport, food, entertaiments, health, other };
             localStorage.setItem('expenses', JSON.stringify(expenses));
 
             displaySavedData();
@@ -87,22 +100,25 @@
 
         // Функция для отображения сохраненных данных
         function displaySavedData() {
-            const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || { transport: 0, food: 0, other: 0 };
+            const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || { transport: 0, food: 0, entertaiments: 0, health: 0, other: 0 };
             const savedDataElement = document.getElementById('savedData');
             savedDataElement.innerHTML = `
                 <strong>Сохраненные расходы:</strong><br>
                 Транспорт: ${savedExpenses.transport} <br>
                 Еда: ${savedExpenses.food} <br>
+                Развлечения: ${savedExpenses.entertaiments} <br>
+                Здоровье: ${savedExpenses.health} <br>
                 Прочие расходы: ${savedExpenses.other}
+
             `;
         }
 
         // Функция для расчета остатка
         function calculate() {
             const income = parseFloat(document.getElementById('income').value) || 0;
-            const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || { transport: 0, food: 0, other: 0 };
+            const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || { transport: 0, food: 0, entertaiments: 0, health: 0, other: 0 };
 
-            const totalExpenses = savedExpenses.transport + savedExpenses.food + savedExpenses.other;
+            const totalExpenses = savedExpenses.transport + savedExpenses.food + savedExpenses.entertaiments + savedExpenses.health + savedExpenses.other;
             const balance = income - totalExpenses;
 
             const resultElement = document.getElementById('result');
