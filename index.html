@@ -14,7 +14,7 @@
             max-width: 400px;
             margin: auto;
         }
-        input, button {
+        input, button, select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -48,6 +48,25 @@
 
         <label for="income">Доходы:</label>
         <input type="number" id="income" placeholder="Введите сумму доходов" />
+
+        <label for="date">Дата:</label>
+        <input type="date" id="date" />
+
+        <label for="month">Месяц:</label>
+        <select id="month">
+            <option value="Январь">Январь</option>
+            <option value="Февраль">Февраль</option>
+            <option value="Март">Март</option>
+            <option value="Апрель">Апрель</option>
+            <option value="Май">Май</option>
+            <option value="Июнь">Июнь</option>
+            <option value="Июль">Июль</option>
+            <option value="Август">Август</option>
+            <option value="Сентябрь">Сентябрь</option>
+            <option value="Октябрь">Октябрь</option>
+            <option value="Ноябрь">Ноябрь</option>
+            <option value="Декабрь">Декабрь</option>
+        </select>
 
         <div class="category-input">
             <label for="transport">Транспорт:</label>
@@ -87,29 +106,31 @@
         function saveData() {
             const transport = parseFloat(document.getElementById('transport').value) || 0;
             const food = parseFloat(document.getElementById('food').value) || 0;
-            const entertaiments = parseFloat(document.getElementById('entertaiments').value) || 0; // Исправлено
+            const entertaiments = parseFloat(document.getElementById('entertaiments').value) || 0;
             const health = parseFloat(document.getElementById('health').value) || 0;
             const other = parseFloat(document.getElementById('other').value) || 0;
-    
-            const expenses = { transport, food, entertaiments, health, other };
+            const date = document.getElementById('date').value || "Дата не указана";
+            const month = document.getElementById('month').value || "Месяц не указан";
+
+            const expenses = { transport, food, entertaiments, health, other, date, month };
             localStorage.setItem('expenses', JSON.stringify(expenses));
-    
+
             displaySavedData();
         }
 
-    
         // Функция для отображения сохраненных данных
         function displaySavedData() {
-            const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || { transport: 0, food: 0, entertaiments: 0, health: 0, other: 0 };
+            const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || { transport: 0, food: 0, entertaiments: 0, health: 0, other: 0, date: "Дата не указана", month: "Месяц не указан" };
             const savedDataElement = document.getElementById('savedData');
             savedDataElement.innerHTML = `
                 <strong>Сохраненные расходы:</strong><br>
+                Дата: ${savedExpenses.date} <br>
+                Месяц: ${savedExpenses.month} <br>
                 Транспорт: ${savedExpenses.transport} <br>
                 Еда: ${savedExpenses.food} <br>
                 Развлечения: ${savedExpenses.entertaiments} <br>
                 Здоровье: ${savedExpenses.health} <br>
                 Прочие расходы: ${savedExpenses.other}
-
             `;
         }
 
@@ -134,3 +155,4 @@
     </script>
 </body>
 </html>
+
