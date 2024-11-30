@@ -104,6 +104,23 @@
     </div>
 
     <script>
+        function syncMonthWithDate() {
+    const dateInput = document.getElementById('date').value;
+    const monthSelect = document.getElementById('month');
+
+    if (dateInput) {
+        const date = new Date(dateInput);
+        const monthNames = [
+            "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+            "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+        ];
+        const month = monthNames[date.getMonth()];
+        
+        // Установим соответствующий месяц в поле "Месяц"
+        monthSelect.value = month;
+    }
+}
+
         // Функция для сохранения данных в LocalStorage
         function saveData() {
             const transport = parseFloat(document.getElementById('transport').value) || 0;
