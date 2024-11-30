@@ -50,8 +50,8 @@
         <input type="number" id="income" placeholder="Введите сумму доходов" />
 
         <label for="date">Дата:</label>
-        <input type="date" id="date" />
-
+        <input type="date" id="date" onchange="syncMonthWithDate()" />
+        
         <label for="month">Месяц:</label>
         <select id="month">
             <option value="Январь">Январь</option>
@@ -67,6 +67,7 @@
             <option value="Ноябрь">Ноябрь</option>
             <option value="Декабрь">Декабрь</option>
         </select>
+        
 
         <div class="category-input">
             <label for="transport">Транспорт:</label>
